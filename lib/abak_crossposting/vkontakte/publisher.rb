@@ -1,10 +1,21 @@
 module AbakCrossposting
   module Vkontakte
+    # Posting to Vkontakte public group wall
+    #
+    # Usage
+    #   post = { :message => 'Hello, Vkontakte!', :link => 'http://my_home_page.html' }
+    #   group = { :id => 123, :access_token => 'aCCEssToKEN' }
+    #   publisher = AbakCrossposting::Vkontakte::Publisher.new post, group
+    #   publisher.run
     class Publisher
       require 'ostruct'
+      require 'vkontakte_api'
+      require 'abak_crossposting/base/post'
 
       attr_reader :group, :post
 
+      # @param [Hash] post  Content for posting (message, link, picture)
+      # @param [Hash] group Vkontakte group details (id, token)
       def initialize(post, group)
         @post  = Base::Post.new post
         @group = Group.new group
@@ -21,6 +32,8 @@ module AbakCrossposting
 
     private
 
+      class Group < OpenStruct; end
+
       def api
         @api ||= VkontakteApi::Client.new(group.access_token)
       end
@@ -29,6 +42,7 @@ module AbakCrossposting
         attachments = []
         attachments << picture_id if post.has_picture?
         attachments << post.link  if post.has_link?
+        attachments
       end
 
       def picture_id
@@ -52,8 +66,6 @@ module AbakCrossposting
       def parse_post_id(response)
         "-#{group.id}_#{response.post_id}"
       end
-
-      class Group < OpenStruct; end
 
     end
   end

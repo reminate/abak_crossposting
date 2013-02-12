@@ -1,6 +1,7 @@
 module AbakCrossposting
   module Base
     require 'ostruct'
+    require 'mime/types'
 
     class Post < OpenStruct
 
@@ -17,7 +18,7 @@ module AbakCrossposting
       end
 
       def picture_content_type
-        MIME::Types.type_for(picture).first.try(:content_type)
+        MIME::Types.type_for(picture).first.content_type
       end
 
     end
