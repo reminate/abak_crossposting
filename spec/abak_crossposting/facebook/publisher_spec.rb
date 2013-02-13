@@ -11,6 +11,7 @@ describe AbakCrossposting::Facebook::Publisher do
     let(:message)   { 'Cowabunga' }
     let(:link)      { 'http://www.tmnt.com/' }
     let(:picture)   { '/home/leonardo/plan.jpg' }
+    let(:response)  { { "id"=> 1 } }
 
     context "when there is post with message only" do
 
@@ -19,7 +20,7 @@ describe AbakCrossposting::Facebook::Publisher do
       it "should call put_wall_post method with message param only" do
         api.should_receive(:put_wall_post).
             with(message, {}, group[:id]).
-            and_return("id"=> 1)
+            and_return(response)
         publisher.run
       end
     end
@@ -30,7 +31,7 @@ describe AbakCrossposting::Facebook::Publisher do
       it "should call put_wall_post method with link param only" do
         api.should_receive(:put_wall_post).
             with(nil, post, group[:id]).
-            and_return("id"=> 1)
+            and_return(response)
         publisher.run
       end
     end
@@ -41,7 +42,7 @@ describe AbakCrossposting::Facebook::Publisher do
       it "should call put_picture method with picture param only" do
         api.should_receive(:put_picture).
             with(picture, {}, group[:id]).
-            and_return("post_id" => 1)
+            and_return(response)
         publisher.run
       end
     end
@@ -52,7 +53,7 @@ describe AbakCrossposting::Facebook::Publisher do
       it "should call put_wall_post method with message and link params" do
         api.should_receive(:put_wall_post).
             with(message, { :link => link }, group[:id]).
-            and_return("id"=> 1)
+            and_return(response)
         publisher.run
       end
     end
@@ -63,7 +64,7 @@ describe AbakCrossposting::Facebook::Publisher do
       it "should call put_picture method with message and picture params" do
         api.should_receive(:put_picture).
             with(picture, {:message => message}, group[:id]).
-            and_return("post_id" => 1)
+            and_return(response)
         publisher.run
       end
     end
@@ -74,7 +75,7 @@ describe AbakCrossposting::Facebook::Publisher do
       it "should call put_picture method with message and picture params" do
         api.should_receive(:put_picture).
             with(picture, {:message => message}, group[:id]).
-            and_return("post_id" => 1)
+            and_return(response)
         publisher.run
       end
     end
@@ -85,7 +86,7 @@ describe AbakCrossposting::Facebook::Publisher do
       it "should call put_picture method without params" do
         api.should_receive(:put_wall_post).
             with(nil, {}, group[:id]).
-            and_return("id"=> 1)
+            and_return(response)
         publisher.run
       end
     end
