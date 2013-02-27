@@ -39,9 +39,10 @@ module AbakCrossposting
       end
 
       def attachments
-        [].
-          tap {|a| a << picture_id if post.has_picture? }.
-          tap {|a| a << post.link  if post.has_link? }
+        [].tap { |a| 
+          a << picture_id if post.has_picture?
+          a << post.link  if post.has_link? 
+        }
       end
 
       def picture_id
