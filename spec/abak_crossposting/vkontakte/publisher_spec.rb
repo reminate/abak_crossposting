@@ -23,7 +23,7 @@ describe AbakCrossposting::Vkontakte::Publisher do
 
       it "should call post method with message param only" do
         api.should_receive(:method_missing).
-            with(:post, {:message => message, :attachments => [], :owner_id => -group[:id], :from_group => true}).
+            with(:post, {:message => message, :attachments => [], :owner_id => "-#{group[:id]}", :from_group => true}).
             and_return(response)
 
         publisher.run
@@ -35,7 +35,7 @@ describe AbakCrossposting::Vkontakte::Publisher do
 
       it "should call post method with link param only" do
         api.should_receive(:method_missing).
-            with(:post, {:message => nil, :attachments => [link], :owner_id => -group[:id], :from_group => true}).
+            with(:post, {:message => nil, :attachments => [link], :owner_id => "-#{group[:id]}", :from_group => true}).
             and_return(response)
 
         publisher.run
@@ -47,7 +47,7 @@ describe AbakCrossposting::Vkontakte::Publisher do
 
       it "should call post method with message and link params" do
         api.should_receive(:method_missing).
-            with(:post, {:message => message, :attachments => [link], :owner_id => -group[:id], :from_group => true}).
+            with(:post, {:message => message, :attachments => [link], :owner_id => "-#{group[:id]}", :from_group => true}).
             and_return(response)
 
         publisher.run
@@ -60,7 +60,7 @@ describe AbakCrossposting::Vkontakte::Publisher do
 
       it "should call post method without message and attachments params" do
         api.should_receive(:method_missing).
-            with(:post, {:message => nil, :attachments => [], :owner_id => -group[:id], :from_group => true}).
+            with(:post, {:message => nil, :attachments => [], :owner_id => "-#{group[:id]}", :from_group => true}).
             and_return(response)
 
         publisher.run
@@ -95,7 +95,7 @@ describe AbakCrossposting::Vkontakte::Publisher do
         should_upload_picture
 
         api.should_receive(:method_missing).
-            with(:post, {:message => nil, :attachments => ["photo1_1"], :owner_id => -group[:id], :from_group => true}).
+            with(:post, {:message => nil, :attachments => ["photo1_1"], :owner_id => "-#{group[:id]}", :from_group => true}).
             and_return(response)
 
         publisher.run
@@ -108,7 +108,7 @@ describe AbakCrossposting::Vkontakte::Publisher do
           should_upload_picture
 
           api.should_receive(:method_missing).
-            with(:post, {:message => message, :attachments => ["photo1_1"], :owner_id => -group[:id], :from_group => true}).
+            with(:post, {:message => message, :attachments => ["photo1_1"], :owner_id => "-#{group[:id]}", :from_group => true}).
             and_return(response)
 
           publisher.run
@@ -122,7 +122,7 @@ describe AbakCrossposting::Vkontakte::Publisher do
           should_upload_picture
 
           api.should_receive(:method_missing).
-            with(:post, {:message => nil, :attachments => ["photo1_1", link], :owner_id => -group[:id], :from_group => true}).
+            with(:post, {:message => nil, :attachments => ["photo1_1", link], :owner_id => "-#{group[:id]}", :from_group => true}).
             and_return(response)
 
           publisher.run
@@ -137,7 +137,7 @@ describe AbakCrossposting::Vkontakte::Publisher do
           should_upload_picture
 
           api.should_receive(:method_missing).
-            with(:post, {:message => message, :attachments => ["photo1_1", link], :owner_id => -group[:id], :from_group => true}).
+            with(:post, {:message => message, :attachments => ["photo1_1", link], :owner_id => "-#{group[:id]}", :from_group => true}).
             and_return(response)
 
           publisher.run

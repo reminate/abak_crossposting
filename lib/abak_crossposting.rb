@@ -3,5 +3,5 @@ require "abak_crossposting/vkontakte/publisher"
 require "abak_crossposting/facebook/publisher"
 
 module AbakCrossposting
-
+  class APIError < StandardError; end
 end

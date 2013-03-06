@@ -24,24 +24,27 @@ module AbakCrossposting
       def run
         response = api.wall.post message:     post.message,
                                  attachments: attachments,
-                                 owner_id:    -group.id,
+                                 owner_id:    "-#{group.id}",
                                  from_group:  true
 
         parse_post_id response
+      rescue ::VkontakteApi::Error
+        raise APIError.new($!.message)
       end
 
-    private
+      private
 
       class Group < OpenStruct; end
 
       def api
-        @api ||= VkontakteApi::Client.new(group.access_token)
+        @api ||= ::VkontakteApi::Client.new(group.access_token)
       end
 
       def attachments
-        [].
-          tap {|a| a << picture_id if post.has_picture? }.
-          tap {|a| a << post.link  if post.has_link? }
+        [].tap { |a| 
+          a << picture_id if post.has_picture?
+          a << post.link  if post.has_link? 
+        }
       end
 
       def picture_id

@@ -24,9 +24,11 @@ module AbakCrossposting
       def run
         response = api.send(post.posting_method, post.content, post.options, group.id)
         parse_post_id response
+      rescue ::Koala::KoalaError
+        raise APIError.new($!.message)
       end
 
-    private
+      private
 
       class Group < OpenStruct; end
 
@@ -52,7 +54,7 @@ module AbakCrossposting
       end
 
       def api
-        @api ||= Koala::Facebook::API.new(group.access_token)
+        @api ||= ::Koala::Facebook::API.new(group.access_token)
       end
 
       def parse_post_id response
