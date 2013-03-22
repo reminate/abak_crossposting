@@ -44,9 +44,9 @@ module AbakCrossposting
 
         def options
           if has_picture? && has_message?
-            { message: message }
+            {message: message}
           elsif has_link?
-            { link: link }
+            {link: link}
           else
             {}
           end

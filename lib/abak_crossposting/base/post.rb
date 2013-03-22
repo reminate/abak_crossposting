@@ -4,24 +4,21 @@ module AbakCrossposting
     require 'mime/types'
 
     class Post < OpenStruct
-
       def has_message?
-        !! message
+        !!message
       end
 
       def has_link?
-        !! link
+        !!link
       end
 
       def has_picture?
-        !! picture
+        !!picture
       end
 
       def picture_content_type
         MIME::Types.type_for(picture).first.to_s
       end
-
     end
-
   end
 end
