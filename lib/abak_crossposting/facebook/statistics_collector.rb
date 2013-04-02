@@ -6,7 +6,7 @@ module AbakCrossposting
         #
         # Usage
         #   AbakCrossposting::Facebook::StatisticCollector.get_stats("10203831233_535632366321", "ASEWawFADaAsasdHsaytrsrTAZD")
-        #    # => {:likes => 3, :comments => 1, :reposts => 0}
+        #    # => {:likes_count => 3, :comments_count => 1, :reposts_count => 0}
         #
         # @param [String] post_id Facebook ID of the post
         # @param [String] access_token Facebook access_token
@@ -19,7 +19,7 @@ module AbakCrossposting
 
         private
         def stats_info(data)
-          {likes: data["likes"]["count"], comments: data["comments"]["count"], reposts: data["share_count"]}
+          {likes_count: data["likes"]["count"], comments_count: data["comments"]["count"], reposts_count: data["share_count"]}
         end
       end
     end
