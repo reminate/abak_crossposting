@@ -26,7 +26,7 @@ module AbakCrossposting
       end
 
       def run(self_time = true)
-        sleep(timeout) if self_time
+        sleep(_timeout) if self_time
 
         response = api.wall.post message:     post.message,
                                  attachments: attachments,
@@ -76,7 +76,7 @@ module AbakCrossposting
       end
 
       # Escape "Captcha needed"
-      def timeout
+      def _timeout
         [].tap { |seconds|
           0.step(SECONDS_LIMIT, SECONDS_PER_REQUEST) {|sec| seconds << sec}
         }.fetch(group.id.modulo(SECONDS_RANGES))
