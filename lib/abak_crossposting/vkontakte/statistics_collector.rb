@@ -13,7 +13,7 @@ module AbakCrossposting
         def get_stats(post_id, access_token)
           api = ::VkontakteApi::Client.new(access_token)
 
-          data = api.wall.get_by_id(post_id)
+          data = api.wall.get_by_id(posts: post_id)
           stats_info(data)
         end
 
