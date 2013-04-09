@@ -12,10 +12,6 @@ module AbakCrossposting
       require 'vkontakte_api'
       require 'abak_crossposting/base/post'
 
-      SECONDS_PER_REQUEST = 3
-      SECONDS_LIMIT = 117
-      SECONDS_RANGES = 40
-
       attr_reader :group, :post
 
       # @param [Hash] post  Content for posting (message, link, picture)
@@ -25,9 +21,7 @@ module AbakCrossposting
         @group = Group.new group
       end
 
-      def run(self_time = true)
-        sleep(_timeout) if self_time
-
+      def run
         response = api.wall.post message:     post.message,
                                  attachments: attachments,
                                  owner_id:    "-#{group.id}",
@@ -74,14 +68,6 @@ module AbakCrossposting
       def parse_post_id(response)
         "-#{group.id}_#{response.post_id}"
       end
-
-      # Escape "Captcha needed"
-      def _timeout
-        [].tap { |seconds|
-          0.step(SECONDS_LIMIT, SECONDS_PER_REQUEST) {|sec| seconds << sec}
-        }.fetch(group.id.modulo(SECONDS_RANGES))
-      end
-
     end
   end
 end
