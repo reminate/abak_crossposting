@@ -12,6 +12,21 @@ module AbakCrossposting
       require 'vkontakte_api'
       require 'abak_crossposting/base/post'
 
+      REQUESTS_PER_3_SECONDS = 10
+      REQUESTS_DELAY = 3
+
+      def self.run(post, groups)
+        results = []
+
+        groups.each_slice(REQUESTS_PER_3_SECONDS) { |slice|
+          slice.each { |group| results << self.new(post, group).run }
+
+          sleep(REQUESTS_DELAY)
+        }
+
+        results
+      end
+
       attr_reader :group, :post
 
       # @param [Hash] post  Content for posting (message, link, picture)
@@ -27,13 +42,12 @@ module AbakCrossposting
                                  owner_id:    "-#{group.id}",
                                  from_group:  true
 
-        parse_post_id response
-      rescue ::VkontakteApi::Error
-        raise APIError.new($!.message)
+        {post_id: parse_post_id(response)}
+      rescue ::VkontakteApi::Error => e
+        {error: e.message}
       end
 
       private
-
       class Group < OpenStruct; end
 
       def api
@@ -41,9 +55,9 @@ module AbakCrossposting
       end
 
       def attachments
-        [].tap { |a| 
+        [].tap { |a|
           a << picture_id if post.has_picture?
-          a << post.link  if post.has_link? 
+          a << post.link  if post.has_link?
         }
       end
 
@@ -68,6 +82,7 @@ module AbakCrossposting
       def parse_post_id(response)
         "-#{group.id}_#{response.post_id}"
       end
+
     end
   end
 end

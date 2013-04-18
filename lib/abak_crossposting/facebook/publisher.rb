@@ -12,6 +12,12 @@ module AbakCrossposting
       require 'koala'
       require 'abak_crossposting/base/post'
 
+      def self.run(post, groups)
+        results = []
+        groups.each { |_group| results << self.new(post, _group).run }
+        results
+      end
+
       attr_reader :post, :group
 
       # @param [Hash] post  Content for posting (message, link, picture)
@@ -23,9 +29,9 @@ module AbakCrossposting
 
       def run
         response = api.send(post.posting_method, post.content, post.options, group.id)
-        parse_post_id response
+        {post_id: parse_post_id(response)}
       rescue ::Koala::KoalaError
-        raise APIError.new($!.message)
+        {error: e.message}
       end
 
       private
