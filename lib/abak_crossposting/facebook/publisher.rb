@@ -29,7 +29,7 @@ module AbakCrossposting
 
       def run
         response = api.send(post.posting_method, post.content, post.options, group.id)
-        {post_id: parse_post_id(response)}
+        {post_id: post_id(response)}
       rescue ::Koala::KoalaError => e
         {error: e.message}
       end
@@ -63,7 +63,7 @@ module AbakCrossposting
         @api ||= ::Koala::Facebook::API.new(group.access_token)
       end
 
-      def parse_post_id response
+      def post_id response
         post.has_picture? ? response["post_id"] : response["id"]
       end
 

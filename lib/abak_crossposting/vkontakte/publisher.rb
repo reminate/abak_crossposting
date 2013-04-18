@@ -12,13 +12,13 @@ module AbakCrossposting
       require 'vkontakte_api'
       require 'abak_crossposting/base/post'
 
-      REQUESTS_PER_3_SECONDS = 10
+      BATCH_SIZE = 10
       REQUESTS_DELAY = 3
 
       def self.run(post, groups)
         results = []
 
-        groups.each_slice(REQUESTS_PER_3_SECONDS) { |slice|
+        groups.each_slice(BATCH_SIZE) { |slice|
           slice.each { |group| results << self.new(post, group).run }
 
           sleep(REQUESTS_DELAY)
@@ -42,7 +42,7 @@ module AbakCrossposting
                                  owner_id:    "-#{group.id}",
                                  from_group:  true
 
-        {post_id: parse_post_id(response)}
+        {post_id: post_id(response)}
       rescue ::VkontakteApi::Error => e
         {error: e.message}
       end
@@ -79,7 +79,7 @@ module AbakCrossposting
         api.photos.save_wall_photo(args.merge gid: group.id)
       end
 
-      def parse_post_id(response)
+      def post_id(response)
         "-#{group.id}_#{response.post_id}"
       end
 
