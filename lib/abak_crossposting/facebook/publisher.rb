@@ -30,7 +30,7 @@ module AbakCrossposting
       def run
         response = api.send(post.posting_method, post.content, post.options, group.id)
         {post_id: parse_post_id(response)}
-      rescue ::Koala::KoalaError
+      rescue ::Koala::KoalaError => e
         {error: e.message}
       end
 
