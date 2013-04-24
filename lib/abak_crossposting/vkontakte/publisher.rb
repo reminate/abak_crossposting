@@ -12,17 +12,16 @@ module AbakCrossposting
       require 'vkontakte_api'
       require 'abak_crossposting/base/post'
 
-      BATCH_SIZE = 10
-      REQUESTS_DELAY = 3
+      REQUESTS_DELAY = 6
 
       def self.run(post, groups)
         results = []
 
-        groups.each_slice(BATCH_SIZE) { |slice|
-          slice.each { |group| results << self.new(post, group).run }
+        groups.each do |group|
+          results << self.new(post, group).run
 
           sleep(REQUESTS_DELAY)
-        }
+        end
 
         results
       end
