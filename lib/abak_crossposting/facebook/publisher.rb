@@ -60,7 +60,11 @@ module AbakCrossposting
       end
 
       def api
-        @api ||= ::Koala::Facebook::API.new(group.access_token)
+        return @api if @api
+
+        user_api = ::Koala::Facebook::API.new(group.access_token)
+        page_token = user_api.get_page_access_token(group.id)
+        @api = ::Koala::Facebook::API.new(page_token)
       end
 
       def post_id response

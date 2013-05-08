@@ -13,6 +13,8 @@ describe AbakCrossposting::Facebook::Publisher do
     let(:picture)   { '/home/leonardo/plan.jpg' }
     let(:response)  { { "id"=> 1 } }
 
+    before { ::Koala::Facebook::API.any_instance.stub(:get_page_access_token).and_return("page_token") }
+
     context "when there is post with message only" do
 
       let(:post) { {:message => message} }
