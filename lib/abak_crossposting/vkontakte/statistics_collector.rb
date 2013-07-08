@@ -14,7 +14,7 @@ module AbakCrossposting
           api = ::VkontakteApi::Client.new(access_token)
 
           data = api.wall.get_by_id(posts: post_id)
-          stats_info(data.first)
+          data.empty? ? {} : stats_info(data.first)
         end
 
         private
