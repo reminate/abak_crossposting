@@ -14,7 +14,7 @@ module AbakCrossposting
           api = ::Koala::Facebook::API.new(access_token)
 
           data = api.fql_query("SELECT likes, comments, share_count FROM stream WHERE post_id = '#{post_id}'")
-          stats_info(data.first)
+          data.empty? ? {} : stats_info(data.first)
         end
 
         private
